@@ -11,6 +11,10 @@ class Barrier:
         self.b = Brain()
         self.h = h
         self.x_list = x_list
+        
+        #Creating the neural network
+        neuronPerLayer = [1,2,2,1]
+        self.b.createNN(4,4,neuronPerLayer)
 
     def next_move(self,game):
         self.b.next_move(self.move_list)
