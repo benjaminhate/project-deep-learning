@@ -1,4 +1,4 @@
-from brain import Brain
+from brainAstar import BrainAstar as Brain
 from moves import Moves as m
 
 class Player:
