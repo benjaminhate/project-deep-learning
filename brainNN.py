@@ -1,4 +1,5 @@
 from abstractBrain import AbstractBrain
+from database import Database as db
 import numpy as np
 from keras.models import Sequential
 from keras.layers import Dense,Dropout
@@ -7,9 +8,13 @@ class BrainNN(AbstractBrain):
 
     #The neural Network
     model = None
-
+    database = None
     def __init__(self):
         self.model = Sequential()
+        self.database = db(10)
+        self.database.generateData()
+        print(self.database.data)
+        print(self.database.labels)
 
     def createNN(self,inputDim,layer,neuronPerLayer):
         #input dim      : the size of the input vector
@@ -24,11 +29,13 @@ class BrainNN(AbstractBrain):
         self.model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
         print(self.model.summary())
 
-    def trainNN(self,data,labels,nbEpochs,batchSize):
+    def trainNN(self,data,labels,nbEpochs,batchSize,v=0):
         #training
-        self.model.fit(data, labels, epochs=nbEpochs, batch_size=batchSize, verbose=0)
-        
+        self.model.fit(data, labels, epochs=nbEpochs, batch_size=batchSize, verbose=v)
 
     def next_move(self,move_list):
         return move_list[0]
+    
+    def regenerateDb(self, nbVec):
+        self.database = db(nbVec)
     

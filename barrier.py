@@ -14,8 +14,12 @@ class Barrier:
         self.x_list = x_list
 
         #Creating the neural network
-        neuronPerLayer = [1,2,2,1]
-        self.b.createNN(4,4,neuronPerLayer)
+        neuronPerLayer = [1,2,2,2]
+        self.b.createNN(5,4,neuronPerLayer)
+        
+        #Training the NN 
+        #TODO add a method
+        self.b.trainNN(self.b.database.data,self.b.database.labels,10,2,1)
 
     def valid_move_list(self,grid_size):
         move_list = self.move_list.copy()
