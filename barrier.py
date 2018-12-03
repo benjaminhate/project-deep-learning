@@ -12,5 +12,5 @@ class Barrier:
         self.h = h
         self.x_list = x_list
 
-    def next_move(self):
+    def next_move(self,game):
         self.b.next_move(self.move_list)
