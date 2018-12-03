@@ -56,8 +56,8 @@ class Game:
     def draw(self):
         print(self.grid.grid)
 
-grid_size = (5,5)
-player_pos = (0,4)
+grid_size = (10,10)
+player_pos = (0,9)
 barrier_h = 2
 barrier_x_list = [(3,4)]
 

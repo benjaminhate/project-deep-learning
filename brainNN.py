@@ -3,6 +3,7 @@ from database import Database as db
 import numpy as np
 from keras.models import Sequential
 from keras.layers import Dense,Dropout
+from moves import Moves
 
 class BrainNN(AbstractBrain):
 
@@ -35,8 +36,37 @@ class BrainNN(AbstractBrain):
 
 
     def next_move(self,move_list,game):
-        return move_list[0]
+        player_pos = list(game.player.pos)
+        barrier_x_list = list(game.barrier.x_list[0])
+        barrier_h = game.barrier.h
+        size = list(game.grid.size)
+        data = []
+        xp = player_pos[0]/size[0]
+        yp = player_pos[1]/size[1]
+        h = barrier_h/size[1]
+        xd = barrier_x_list[0]/size[0]
+        xf = barrier_x_list[1]/size[0]
+
+        vec = np.array([xp, yp, h, xd, xf])
+        data.append(vec)
+        
+        data = np.array(data)
+        pred = self.model.predict(data)
+        pred = pred > 0.5
+        print(pred)
+        if pred[0][0] == True:
+            #go left
+            move = Moves.LEFT
+        else:
+            #go right
+            move = Moves.RIGHT
+        
+        if move in move_list:
+            return move
+
+        return Moves.STILL
     
     def regenerateDb(self, nbVec):
         self.database = db(nbVec)
+        self.database.generateData()
     
