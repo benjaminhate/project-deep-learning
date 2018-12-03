@@ -1,14 +1,14 @@
 from brainAstar import BrainAstar as Brain
 from moves import Moves as m
+from unit import Unit
 
-class Player:
-    b = None
+class Player(Unit):
     pos = (0,0)
     move_list = [m.RIGHT,m.LEFT,m.STILL]
-    last_move = None
 
     def __init__(self,pos):
-        self.b = Brain()
+        super(Player, self).__init__()
+        self.brain = Brain()
         self.pos = pos
 
     def valid_move_list(self,grid_size):
@@ -29,9 +29,3 @@ class Player:
         pos[0] += trans[0]
         pos[1] += trans[1]
         self.pos = tuple(pos)
-
-    def next_move(self,game):
-        move_list = self.valid_move_list(game.grid.size)
-        self.last_move = self.b.next_move(move_list)
-        trans = self.last_move.translation()
-        self.translate(trans)

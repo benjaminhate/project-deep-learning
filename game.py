@@ -1,24 +1,7 @@
 from player import Player
 from barrier import Barrier
-import numpy as np
-from enum import Enum
 import copy
-
-class GridValue(Enum):
-    EMPTY = 0
-    PLAYER = 1
-    WALL = 2
-    HOLE = 3
-    FINAL = 4
-
-class Grid:
-    size = (0,0)
-    grid = None
-
-    def __init__(self,size):
-        print("Creating a grid of dimensions " + str(size))
-        self.size = size
-        self.grid = np.zeros(size)
+import grid as g
 
 class Game:
     player = None
@@ -27,7 +10,7 @@ class Game:
     win = None
 
     def __init__(self,grid_size,player_pos,barrier_h,barrier_x_list):
-        self.grid = Grid(grid_size)
+        self.grid = g.Grid(grid_size)
         self.player = Player(player_pos)
         self.barrier = Barrier(barrier_h,barrier_x_list)
         self.update_grid()
@@ -44,24 +27,31 @@ class Game:
         self.player.translate((0,-1))
 
     def check(self):
-        if(self.player.pos[1] == 0):
+        if self.player.pos[1] == 0:
             print("PLAYER WIN")
             self.win = True
             return True
+        if self.player.pos[1] == self.barrier.h:
+            px = self.player.pos[0]
+            for x in self.barrier.x_list:
+                if px < x[0] or px > x[1]:
+                    print("PLAYER LOOSE")
+                    self.win = False
+                    return True
         return False
 
     def update_grid(self):
         for x in range(self.grid.size[0]):
             for y in range(self.grid.size[1]):
-                self.grid.grid[y,x] = GridValue.EMPTY.value
-                if (x,y) == self.player.pos:
-                    self.grid.grid[y,x] = GridValue.PLAYER.value
+                self.grid.grid[y,x] = g.GridValue.EMPTY.value
                 if y == self.barrier.h:
                     for xs in self.barrier.x_list:
                         if x >= xs[0] and x <= xs[1]:
-                            self.grid.grid[y,x] = GridValue.HOLE.value
-                        elif self.grid.grid[y,x] != GridValue.HOLE.value:
-                            self.grid.grid[y,x] = GridValue.WALL.value
+                            self.grid.grid[y,x] = g.GridValue.HOLE.value
+                        elif self.grid.grid[y,x] != g.GridValue.HOLE.value:
+                            self.grid.grid[y,x] = g.GridValue.WALL.value
+                if (x,y) == self.player.pos:
+                    self.grid.grid[y,x] = g.GridValue.PLAYER.value
 
     def draw(self):
         print(self.grid.grid)
@@ -69,7 +59,7 @@ class Game:
 grid_size = (5,5)
 player_pos = (0,4)
 barrier_h = 2
-barrier_x_list = [(2,2)]
+barrier_x_list = [(3,4)]
 
 game = Game(grid_size,player_pos,barrier_h,barrier_x_list)
 game.draw()

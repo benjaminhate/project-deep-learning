@@ -33,6 +33,9 @@ class node:
         else:
             return 1
 
+    def get_pos(self):
+        return (self.state[0],self.state[1])
+
 def cost(n1,n2):
     return n1.cost() + n2.cost()
 
