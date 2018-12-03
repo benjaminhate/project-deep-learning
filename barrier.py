@@ -12,7 +12,7 @@ class Barrier:
         self.b = Brain()
         self.h = h
         self.x_list = x_list
-        
+
         #Creating the neural network
         neuronPerLayer = [1,2,2,1]
         self.b.createNN(4,4,neuronPerLayer)
@@ -35,11 +35,10 @@ class Barrier:
             x = list(x)
             x[0] += trans
             x[1] += trans
-            x_list.append(x)
+            x_list.append(tuple(x))
         self.x_list = x_list
 
     def next_move(self,game):
-        print(game.player.pos)
         move_list = self.valid_move_list(game.grid.size)
         self.last_move = self.b.next_move(move_list)
         trans = self.last_move.translation()

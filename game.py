@@ -24,11 +24,12 @@ class Game:
     player = None
     barrier = None
     grid = None
+    win = None
 
-    def __init__(self):
-        self.grid = Grid((5,5))
-        self.player = Player((0,0))
-        self.barrier = Barrier(2,[(3,4)])
+    def __init__(self,grid_size,player_pos,barrier_h,barrier_x_list):
+        self.grid = Grid(grid_size)
+        self.player = Player(player_pos)
+        self.barrier = Barrier(barrier_h,barrier_x_list)
         self.update_grid()
 
     def update(self):
@@ -36,7 +37,18 @@ class Game:
         game = copy.deepcopy(self)
         self.player.next_move(game)
         self.barrier.next_move(game)
+        self.force_move()
         self.update_grid()
+
+    def force_move(self):
+        self.player.translate((0,-1))
+
+    def check(self):
+        if(self.player.pos[1] == 0):
+            print("PLAYER WIN")
+            self.win = True
+            return True
+        return False
 
     def update_grid(self):
         for x in range(self.grid.size[0]):
@@ -54,8 +66,13 @@ class Game:
     def draw(self):
         print(self.grid.grid)
 
-game = Game()
+grid_size = (5,5)
+player_pos = (0,4)
+barrier_h = 2
+barrier_x_list = [(2,2)]
+
+game = Game(grid_size,player_pos,barrier_h,barrier_x_list)
 game.draw()
-for i in range(5):
+while(not game.check()):
     game.update()
     game.draw()

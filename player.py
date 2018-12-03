@@ -24,11 +24,14 @@ class Player:
             move_list.remove(m.DOWN)
         return move_list
 
-    def next_move(self,game):
+    def translate(self,trans):
         pos = list(self.pos)
-        move_list = self.valid_move_list(game.grid.size)
-        self.last_move = self.b.next_move(move_list)
-        trans = self.last_move.translation()
         pos[0] += trans[0]
         pos[1] += trans[1]
         self.pos = tuple(pos)
+
+    def next_move(self,game):
+        move_list = self.valid_move_list(game.grid.size)
+        self.last_move = self.b.next_move(move_list)
+        trans = self.last_move.translation()
+        self.translate(trans)
