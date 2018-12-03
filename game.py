@@ -2,12 +2,14 @@ from player import Player
 from barrier import Barrier
 import numpy as np
 from enum import Enum
+import copy
 
 class GridValue(Enum):
     EMPTY = 0
     PLAYER = 1
     WALL = 2
-    FINAL = 3
+    HOLE = 3
+    FINAL = 4
 
 class Grid:
     size = (0,0)
@@ -26,12 +28,14 @@ class Game:
     def __init__(self):
         self.grid = Grid((5,5))
         self.player = Player((0,0))
-        self.barrier = Barrier(2,[(2,2)])
+        self.barrier = Barrier(2,[(3,4)])
         self.update_grid()
 
     def update(self):
-        self.player.next_move(self)
-        self.barrier.next_move(self)
+        # Saving the game status to not influence the barrier from the player's next move
+        game = copy.deepcopy(self)
+        self.player.next_move(game)
+        self.barrier.next_move(game)
         self.update_grid()
 
     def update_grid(self):
@@ -40,8 +44,12 @@ class Game:
                 self.grid.grid[y,x] = GridValue.EMPTY.value
                 if (x,y) == self.player.pos:
                     self.grid.grid[y,x] = GridValue.PLAYER.value
-                if y == self.barrier.h and (x<self.barrier.x_list[0][0] or x>self.barrier.x_list[0][1]):
-                    self.grid.grid[y,x] = GridValue.WALL.value
+                if y == self.barrier.h:
+                    for xs in self.barrier.x_list:
+                        if x >= xs[0] and x <= xs[1]:
+                            self.grid.grid[y,x] = GridValue.HOLE.value
+                        elif self.grid.grid[y,x] != GridValue.HOLE.value:
+                            self.grid.grid[y,x] = GridValue.WALL.value
 
     def draw(self):
         print(self.grid.grid)
