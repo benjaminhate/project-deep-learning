@@ -4,7 +4,7 @@ from moves import Moves as m
 class Player:
     b = None
     pos = (0,0)
-    move_list = [m.RIGHT,m.LEFT,m.UP,m.STILL]
+    move_list = [m.RIGHT,m.LEFT,m.STILL]
     last_move = None
 
     def __init__(self,pos):
