@@ -1,4 +1,4 @@
-from brain import Brain
+from brainNN import BrainNN as Brain
 from moves import Moves as m
 
 class Barrier:
