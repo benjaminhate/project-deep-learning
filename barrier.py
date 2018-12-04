@@ -13,14 +13,20 @@ class Barrier(Unit):
         self.h = h
         self.x_list = x_list
 
+    def createNN(self):
         #Creating the neural network
         neuronPerLayer = [1,2,2,2]
         self.brain.createNN(5,4,neuronPerLayer)
 
+    def train(self):
         #Training the NN
         #TODO add a method
         self.brain.regenerateDb(1000)
         self.brain.trainNN(self.brain.database.data,self.brain.database.labels,20,2,1)
+
+    def clone(self):
+        barrier = Barrier(self.h,self.x_list)
+        return barrier
 
     def valid_move_list(self,grid_size):
         move_list = self.move_list.copy()

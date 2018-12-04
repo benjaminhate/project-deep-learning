@@ -2,6 +2,7 @@ from player import Player
 from barrier import Barrier
 import copy
 import grid as g
+import time
 
 class Game:
     player = None
@@ -9,19 +10,44 @@ class Game:
     grid = None
     win = None
 
-    def __init__(self,grid_size,player_pos,barrier_h,barrier_x_list):
-        self.grid = g.Grid(grid_size)
-        self.player = Player(player_pos)
-        self.barrier = Barrier(barrier_h,barrier_x_list)
-        self.update_grid()
+    def __init__(self):
+        pass
+
+    def initialize(grid_size,player_pos,barrier_h,barrier_x_list):
+        game = Game()
+        game.grid = g.Grid(grid_size)
+        game.player = Player(player_pos)
+        game.barrier = Barrier(barrier_h,barrier_x_list)
+        game.barrier.createNN()
+        game.barrier.train()
+        game.update_grid()
+        return game
+
+    def clone(self):
+        game = Game()
+        game.player = self.player.clone()
+        game.barrier = self.barrier.clone()
+        game.grid = self.grid.clone()
+        game.update_grid()
+        return game
 
     def update(self):
         # Saving the game status to not influence the barrier from the player's next move
-        game = copy.deepcopy(self)
+        start_time = time.time()
+        game = self.clone()
+        print("------------ DEEPCOPY time : %s seconds" % (time.time() - start_time))
+        start_time = time.time()
         self.player.next_move(game)
+        print("------------ PLAYER time : %s seconds" % (time.time() - start_time))
+        start_time = time.time()
         self.barrier.next_move(game)
+        print("------------ BARRIER time : %s seconds" % (time.time() - start_time))
+        start_time = time.time()
         self.force_move()
+        print("------------ FORCE MOVE time : %s seconds" % (time.time() - start_time))
+        start_time = time.time()
         self.update_grid()
+        print("------------ UPDATE time : %s seconds" % (time.time() - start_time))
 
     def force_move(self):
         self.player.translate((0,-1))
@@ -62,7 +88,7 @@ player_pos = (grid_size[0]/2,grid_size[1]-1)
 barrier_h = 2
 barrier_x_list = [(3,4)]
 
-game = Game(grid_size,player_pos,barrier_h,barrier_x_list)
+game = Game.initialize(grid_size,player_pos,barrier_h,barrier_x_list)
 game.draw()
 while(not game.check()):
     game.update()

@@ -51,7 +51,7 @@ class BrainNN(AbstractBrain):
 
         vec = np.array([xp, yp, h, xd, xf])
         data.append(vec)
-        
+
         data = np.array(data)
         pred = self.model.predict(data)
         pred = pred > 0.5
@@ -67,10 +67,7 @@ class BrainNN(AbstractBrain):
             return move
 
         return Moves.STILL
-    
+
     def regenerateDb(self, nbVec):
         self.database = db(nbVec)
         self.database.generateData()
-
-    
-    
