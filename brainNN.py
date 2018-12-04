@@ -16,8 +16,6 @@ class BrainNN(AbstractBrain):
         self.model = Sequential()
         self.database = db(10)
         self.database.generateData()
-        print(self.database.data)
-        print(self.database.labels)
 
     def createNN(self,inputDim,layer,neuronPerLayer):
         #input dim      : the size of the input vector
@@ -34,7 +32,13 @@ class BrainNN(AbstractBrain):
 
     def trainNN(self,data,labels,nbEpochs,batchSize,v=0):
         #training
-        self.model.fit(data, labels, epochs=nbEpochs, batch_size=batchSize, verbose=v)
+        #self.model.fit(data, labels, epochs=nbEpochs, batch_size=batchSize, verbose=v)
+
+        #in case you want to export the model
+        # self.exportNN("model.h5")
+
+        #import a model instead of training
+        self.importNN("model.h5")
 
 
     def next_move(self,move_list,game):
@@ -55,7 +59,6 @@ class BrainNN(AbstractBrain):
         data = np.array(data)
         pred = self.model.predict(data)
         pred = pred > 0.5
-        print(pred)
         if pred[0][0] == True:
             #go right
             move = Moves.RIGHT
@@ -71,3 +74,9 @@ class BrainNN(AbstractBrain):
     def regenerateDb(self, nbVec):
         self.database = db(nbVec)
         self.database.generateData()
+
+    def exportNN(self,name):
+        self.model.save(name)
+    
+    def importNN(self,name):
+        self.model = load_model(name)
