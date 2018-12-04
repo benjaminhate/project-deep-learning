@@ -26,6 +26,7 @@ class BrainAstar(AbstractBrain):
             n = a.node((x,y,a.nodeState.WALL,1))
             node_list.append(n)
 
+        #start_time = time.time()
         path = a.astar(node_list,start,final,game.grid.size)
         if path:
             while path.father and path.father.state[2] != a.nodeState.START:

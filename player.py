@@ -11,6 +11,10 @@ class Player(Unit):
         self.brain = Brain()
         self.pos = pos
 
+    def clone(self):
+        player = Player(self.pos)
+        return player
+
     def valid_move_list(self,grid_size):
         pos = list(self.pos)
         move_list = self.move_list.copy()
