@@ -21,22 +21,21 @@ class BrainAstar(AbstractBrain):
         node_list.append(final)
 
         #TODO A OPTIMISER !
-        for x in range(game.grid.size[0]):
-            for y in range(game.grid.size[1]):
-                if game.grid.grid[y,x] == gv.WALL.value:
-                    n = a.node((x,y,a.nodeState.WALL,1))
-                    node_list.append(n)
+        y = game.barrier.h
+        for x in game.barrier.get_wall_x(game.grid.size):
+            n = a.node((x,y,a.nodeState.WALL,1))
+            node_list.append(n)
 
         path = a.astar(node_list,start,final,game.grid.size)
-        while path.father and path.father.state[2] != a.nodeState.START:
-            path = path.father
-
-        if path is not None:
-            player_next_pos = list(path.get_pos())
-            player_last_pos = list(player_pos)
-            trans = [player_next_pos[0] - player_last_pos[0],player_next_pos[1]-player_last_pos[1]]
-            move = Moves.from_translation(tuple(trans))
-            if move in move_list:
-                return move
+        if path:
+            while path.father and path.father.state[2] != a.nodeState.START:
+                path = path.father
+            if path is not None:
+                player_next_pos = list(path.get_pos())
+                player_last_pos = list(player_pos)
+                trans = [player_next_pos[0] - player_last_pos[0],player_next_pos[1]-player_last_pos[1]]
+                move = Moves.from_translation(tuple(trans))
+                if move in move_list:
+                    return move
 
         return Moves.STILL

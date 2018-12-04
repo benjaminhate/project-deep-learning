@@ -15,4 +15,4 @@ class Grid:
     def __init__(self,size):
         print("Creating a grid of dimensions " + str(size))
         self.size = size
-        self.grid = np.zeros(size)
+        self.grid = np.zeros((size[1],size[0]))

@@ -41,23 +41,24 @@ class Game:
         return False
 
     def update_grid(self):
-        for x in range(self.grid.size[0]):
-            for y in range(self.grid.size[1]):
-                self.grid.grid[y,x] = g.GridValue.EMPTY.value
-                if y == self.barrier.h:
-                    for xs in self.barrier.x_list:
-                        if x >= xs[0] and x <= xs[1]:
-                            self.grid.grid[y,x] = g.GridValue.HOLE.value
-                        elif self.grid.grid[y,x] != g.GridValue.HOLE.value:
-                            self.grid.grid[y,x] = g.GridValue.WALL.value
-                if (x,y) == self.player.pos:
-                    self.grid.grid[y,x] = g.GridValue.PLAYER.value
+        wall_x = self.barrier.get_wall_x(self.grid.size)
+        for j in range(self.grid.size[1]):
+            for i in range(self.grid.size[0]):
+                self.grid.grid[j,i] = g.GridValue.EMPTY.value
+                if j == self.barrier.h:
+                    if i in wall_x:
+                        self.grid.grid[j,i] = g.GridValue.WALL.value
+                    else:
+                        self.grid.grid[j,i] = g.GridValue.HOLE.value
+                if (i,j) == self.player.pos:
+                    self.grid.grid[j,i] = g.GridValue.PLAYER.value
 
     def draw(self):
         print(self.grid.grid)
 
-grid_size = (10,10)
-player_pos = (0,9)
+#x_max = grid_size[0] and y_max = grid_size[1]
+grid_size = (10,15)
+player_pos = (grid_size[0]/2,grid_size[1]-1)
 barrier_h = 2
 barrier_x_list = [(3,4)]
 

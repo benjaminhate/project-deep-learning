@@ -37,7 +37,10 @@ class node:
         return (self.state[0],self.state[1])
 
 def cost(n1,n2):
-    return n1.cost() + n2.cost()
+    pos1 = list(n1.get_pos())
+    pos2 = list(n2.get_pos())
+    trans = [pos1[0] - pos2[0],pos1[1] - pos2[1]]
+    return (n1.cost() + n2.cost()) * (abs(trans[0]) + 4 * abs(trans[1]))
 
 def frontier_empty(node_list):
     for n in node_list:
