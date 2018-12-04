@@ -14,20 +14,20 @@ class Database:
         self.labels = np.zeros(nbVec)
         self.nbVec = nbVec
     
-    def h1(self,yp,xp,h,xd,xf):
+    def h1(self,xp,yp,h,xd,xf):
         return abs(yp-h)*(abs((xp + 1) - xd) + abs((xp + 1) - xf))
     
-    def h2(self,yp,xp,h,xd,xf):
+    def h2(self,xp,yp,h,xd,xf):
         return abs(yp-h)*(abs((xp - 1) - xd) + abs((xp - 1) - xf))
 
-    def heuristic(self,yp,xp,h,xd,xf):
-        h = self.h1(yp,xp,h,xd,xf) - self.h2(yp,xp,h,xd,xf)
+    def heuristic(self,xp,yp,h,xd,xf):
+        h = self.h1(xp,yp,h,xd,xf) - self.h2(xp,yp,h,xd,xf)
 
         if(h > 0):
-            #go left
+            #go right
             return np.array([1,0])
         else:
-            #go right
+            #go left
             return np.array([0,1])
 
 

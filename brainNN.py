@@ -3,6 +3,8 @@ from database import Database as db
 import numpy as np
 from keras.models import Sequential
 from keras.layers import Dense,Dropout
+from keras.models import load_model
+
 from moves import Moves
 
 class BrainNN(AbstractBrain):
@@ -55,11 +57,11 @@ class BrainNN(AbstractBrain):
         pred = pred > 0.5
         print(pred)
         if pred[0][0] == True:
-            #go left
-            move = Moves.LEFT
-        else:
             #go right
             move = Moves.RIGHT
+        else:
+            #go left
+            move = Moves.LEFT
         
         if move in move_list:
             return move
@@ -69,4 +71,6 @@ class BrainNN(AbstractBrain):
     def regenerateDb(self, nbVec):
         self.database = db(nbVec)
         self.database.generateData()
+
+    
     
