@@ -20,3 +20,8 @@ class Grid:
     def clone(self):
         grid = Grid(self.size)
         return grid
+
+    def get(self,x,y):
+        return self.grid[y,x]
+    def set(self,x,y,value):
+        self.grid[y,x] = value

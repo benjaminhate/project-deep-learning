@@ -15,7 +15,7 @@ class Barrier(Unit):
 
     def createNN(self):
         #Creating the neural network
-        neuronPerLayer = [1,2,2,2]
+        neuronPerLayer = [3,2,2,2]
         self.brain.createNN(5,4,neuronPerLayer)
 
     def train(self):

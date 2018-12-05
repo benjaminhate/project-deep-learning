@@ -10,33 +10,49 @@ class BrainAstar(AbstractBrain):
 
     def next_move(self,move_list,game):
         player_pos = game.player.pos
-        node_list = []
+        move_prob = []
 
-        start = a.node((player_pos[0],player_pos[1],a.nodeState.START))
-        start.boundary = True
-        final = a.node((2,0,a.nodeState.FINAL))
-        final.f = math.inf
+        for i in range(game.grid.size[0]):
+            node_list = []
 
-        node_list.append(start)
-        node_list.append(final)
+            start = a.node((player_pos[0],player_pos[1],a.nodeState.START))
+            start.boundary = True
+            final = a.node((i,0,a.nodeState.FINAL))
+            final.f = math.inf
 
-        #TODO A OPTIMISER !
-        y = game.barrier.h
-        for x in game.barrier.get_wall_x(game.grid.size):
-            n = a.node((x,y,a.nodeState.WALL,1))
-            node_list.append(n)
+            node_list.append(start)
+            node_list.append(final)
 
-        #start_time = time.time()
-        path = a.astar(node_list,start,final,game.grid.size)
-        if path:
-            while path.father and path.father.state[2] != a.nodeState.START:
-                path = path.father
-            if path is not None:
-                player_next_pos = list(path.get_pos())
-                player_last_pos = list(player_pos)
-                trans = [player_next_pos[0] - player_last_pos[0],player_next_pos[1]-player_last_pos[1]]
-                move = Moves.from_translation(tuple(trans))
-                if move in move_list:
-                    return move
+            y = game.barrier.h
+            for x in game.barrier.get_wall_x(game.grid.size):
+                n = a.node((x,y,a.nodeState.WALL,1))
+                node_list.append(n)
 
-        return Moves.STILL
+            path = a.astar(node_list,start,final,game.grid.size)
+            if path:
+                while path.father and path.father.state[2] != a.nodeState.START:
+                    path = path.father
+                if path is not None:
+                    player_next_pos = list(path.get_pos())
+                    player_last_pos = list(player_pos)
+                    trans = [player_next_pos[0] - player_last_pos[0],player_next_pos[1]-player_last_pos[1]]
+                    move = Moves.from_translation(tuple(trans))
+                    if move in move_list:
+                        move_prob.append(move)
+
+        s = [0,0]
+        for move in move_prob:
+            print(move)
+            t = list(move.translation())
+            s[0] += t[0]
+            s[1] += t[1]
+        if s[0] > 0:
+            s[0] = 1
+        elif s[0] < 0:
+            s[0] = -1
+        if s[1] > 0:
+            s[1] = 1
+        elif s[1] < 0:
+            s[1] = -1
+        print(s)
+        return Moves.from_translation(tuple(s))
