@@ -22,23 +22,23 @@ class BrainNN(AbstractBrain):
         #layer          : the number of layer in the network
         #neuronPerLayer : a list of size hiden layer that contains the number of neurons per layer
 
-        self.model.add(Dense(neuronPerLayer[0], input_dim = inputDim, kernel_initializer='uniform', activation='relu'))
+        self.model.add(Dense(neuronPerLayer[0], input_dim = inputDim, kernel_initializer='glorot_uniform', activation='relu'))
         for i in range(1,layer):
-            self.model.add(Dense(neuronPerLayer[i], kernel_initializer='uniform', activation='sigmoid'))
+            self.model.add(Dense(neuronPerLayer[i], kernel_initializer='glorot_uniform', activation='sigmoid'))
 
         # compile the model
-        self.model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+        self.model.compile(loss='mse', optimizer='adam', metrics=['accuracy'])
         print(self.model.summary())
 
     def trainNN(self,data,labels,nbEpochs,batchSize,v=0):
         #training
-        #self.model.fit(data, labels, epochs=nbEpochs, batch_size=batchSize, verbose=v)
+        self.model.fit(data, labels, epochs=nbEpochs, batch_size=batchSize, verbose=v)
 
         #in case you want to export the model
         # self.exportNN("model.h5")
 
         #import a model instead of training
-        self.importNN("model.h5")
+        #self.importNN("model.h5")
 
 
     def next_move(self,move_list,game):
