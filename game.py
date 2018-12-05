@@ -33,21 +33,21 @@ class Game:
 
     def update(self):
         # Saving the game status to not influence the barrier from the player's next move
-        start_time = time.time()
+        #start_time = time.time()
         game = self.clone()
-        print("------------ DEEPCOPY time : %s seconds" % (time.time() - start_time))
+        #print("------------ DEEPCOPY time : %s seconds" % (time.time() - start_time))
         start_time = time.time()
         self.player.next_move(game)
         print("------------ PLAYER time : %s seconds" % (time.time() - start_time))
-        start_time = time.time()
+        #start_time = time.time()
         self.barrier.next_move(game)
-        print("------------ BARRIER time : %s seconds" % (time.time() - start_time))
-        start_time = time.time()
+        #print("------------ BARRIER time : %s seconds" % (time.time() - start_time))
+        #start_time = time.time()
         self.force_move()
-        print("------------ FORCE MOVE time : %s seconds" % (time.time() - start_time))
-        start_time = time.time()
+        #print("------------ FORCE MOVE time : %s seconds" % (time.time() - start_time))
+        #start_time = time.time()
         self.update_grid()
-        print("------------ UPDATE time : %s seconds" % (time.time() - start_time))
+        #print("------------ UPDATE time : %s seconds" % (time.time() - start_time))
 
     def force_move(self):
         self.player.translate((0,-1))
@@ -58,9 +58,8 @@ class Game:
             self.win = True
             return True
         if self.player.pos[1] == self.barrier.h:
-            px = self.player.pos[0]
-            for x in self.barrier.x_list:
-                if px < x[0] or px > x[1]:
+            for wall_x in self.barrier.get_wall_x(self.grid.size):
+                if self.player.pos[0] == wall_x:
                     print("PLAYER LOOSE")
                     self.win = False
                     return True
@@ -70,14 +69,14 @@ class Game:
         wall_x = self.barrier.get_wall_x(self.grid.size)
         for j in range(self.grid.size[1]):
             for i in range(self.grid.size[0]):
-                self.grid.grid[j,i] = g.GridValue.EMPTY.value
+                self.grid.set(i,j,g.GridValue.EMPTY.value)
                 if j == self.barrier.h:
                     if i in wall_x:
-                        self.grid.grid[j,i] = g.GridValue.WALL.value
+                        self.grid.set(i,j,g.GridValue.WALL.value)
                     else:
-                        self.grid.grid[j,i] = g.GridValue.HOLE.value
+                        self.grid.set(i,j,g.GridValue.HOLE.value)
                 if (i,j) == self.player.pos:
-                    self.grid.grid[j,i] = g.GridValue.PLAYER.value
+                    self.grid.set(i,j,g.GridValue.PLAYER.value)
 
     def draw(self):
         print(self.grid.grid)

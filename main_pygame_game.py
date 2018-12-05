@@ -3,11 +3,12 @@ import pygame
 import pygame.draw
 from game import Game
 from grid import GridValue as gv
+import time
 
 grid_size = (10,30)
 player_pos = (grid_size[0]/2,grid_size[1]-1)
 barrier_h = 2
-barrier_x_list = [(3,4)]
+barrier_x_list = [(0,0),(3,5)]
 
 __cellSize__ = 20
 __screenSize__ = tuple(map(lambda x: int(x*__cellSize__), grid_size))
@@ -26,8 +27,7 @@ class Scene:
     _mouseCoords = (0,0)
     _game = None
     _font = None
-    _process = None
-    _end_process = 0
+    _pause = False
 
     def __init__(self):
         pygame.init()
@@ -42,7 +42,7 @@ class Scene:
         for x in range(self._game.grid.size[0]):
             for y in range(self._game.grid.size[1]):
                 pygame.draw.rect(self._screen,
-                        getColorCell(self._game.grid.grid.item((y,x))),
+                        getColorCell(self._game.grid.get(x,y)),
                         (x*__cellSize__ + 1, y*__cellSize__ + 1, __cellSize__-2, __cellSize__-2))
 
     def update(self):
@@ -54,9 +54,14 @@ def main():
     scene = Scene()
     done = False
     clock = pygame.time.Clock()
+    pause_time = 1
+    start_time = time.time()
     while done == False:
         clock.tick(20)
-        done = scene.update()
+        if not scene._pause and time.time() - start_time > pause_time:
+            print("Update")
+            start_time = time.time()
+            done = scene.update()
         scene.drawMe()
         pygame.display.flip()
         for event in pygame.event.get():
@@ -68,7 +73,11 @@ def main():
                     print("Exiting")
                     done = True
                     break
-        pygame.time.wait(1000)
+                if event.key == pygame.K_p:
+                    print("Pause")
+                    scene._pause = not scene._pause
+                    break
+        #pygame.time.wait(1000)
     pygame.quit()
 
 main()

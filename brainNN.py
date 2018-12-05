@@ -16,6 +16,8 @@ class BrainNN(AbstractBrain):
         self.model = Sequential()
         self.database = db(10)
         self.database.generateData()
+        #print(self.database.data)
+        #print(self.database.labels)
 
     def createNN(self,inputDim,layer,neuronPerLayer):
         #input dim      : the size of the input vector
@@ -59,13 +61,14 @@ class BrainNN(AbstractBrain):
         data = np.array(data)
         pred = self.model.predict(data)
         pred = pred > 0.5
+        #print(pred)
         if pred[0][0] == True:
             #go right
             move = Moves.RIGHT
         else:
             #go left
             move = Moves.LEFT
-        
+
         if move in move_list:
             return move
 
@@ -77,6 +80,6 @@ class BrainNN(AbstractBrain):
 
     def exportNN(self,name):
         self.model.save(name)
-    
+
     def importNN(self,name):
         self.model = load_model(name)
