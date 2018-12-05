@@ -34,7 +34,13 @@ class BrainNN(AbstractBrain):
 
     def trainNN(self,data,labels,nbEpochs,batchSize,v=0):
         #training
-        self.model.fit(data, labels, epochs=nbEpochs, batch_size=batchSize, verbose=v)
+        #self.model.fit(data, labels, epochs=nbEpochs, batch_size=batchSize, verbose=v)
+
+        #in case you want to export the model
+        # self.exportNN("model.h5")
+
+        #import a model instead of training
+        self.importNN("model.h5")
 
 
     def next_move(self,move_list,game):
@@ -71,3 +77,9 @@ class BrainNN(AbstractBrain):
     def regenerateDb(self, nbVec):
         self.database = db(nbVec)
         self.database.generateData()
+
+    def exportNN(self,name):
+        self.model.save(name)
+
+    def importNN(self,name):
+        self.model = load_model(name)
