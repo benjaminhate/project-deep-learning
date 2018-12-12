@@ -13,13 +13,13 @@ class Game:
     def __init__(self):
         pass
 
-    def initialize(grid_size,player_pos,barrier_h,barrier_x_list):
+    def initialize(grid_size,player_pos,barrier_h,barrier_x_list,train_file):
         game = Game()
         game.grid = g.Grid(grid_size)
         game.player = Player(player_pos)
         game.barrier = Barrier(barrier_h,barrier_x_list)
         game.barrier.createNN()
-        game.barrier.train()
+        game.barrier.brain.importNN(train_file)
         game.update_grid()
         return game
 
