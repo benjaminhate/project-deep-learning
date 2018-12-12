@@ -1,6 +1,11 @@
 from brainNN import BrainNN as Brain
 from moves import Moves as m
 from unit import Unit
+import json
+
+with open('params.json') as data_file:    
+    data = json.load(data_file)
+
 
 class Barrier(Unit):
     h = 0
@@ -15,14 +20,12 @@ class Barrier(Unit):
 
     def createNN(self):
         #Creating the neural network
-        neuronPerLayer = [3,2,2,2]
-        self.brain.createNN(5,4,neuronPerLayer)
+        self.brain.createNN(data['inputDim'],data['nbLayer'],data['neuronPerLayer'])
 
     def train(self):
         #Training the NN
-        #TODO add a method
-        self.brain.regenerateDb(1000)
-        self.brain.trainNN(self.brain.database.data,self.brain.database.labels,20,2,1)
+        self.brain.regenerateDb(data['nbVectorDb'])
+        self.brain.trainNN(self.brain.database.data,self.brain.database.labels,data['nbEpoch'],data['batchSize'],data['verbose'])
 
     def clone(self):
         barrier = Barrier(self.h,self.x_list)
