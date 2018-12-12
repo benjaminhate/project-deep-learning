@@ -27,6 +27,7 @@ class BrainNN(AbstractBrain):
         self.model.add(Dense(neuronPerLayer[0], input_dim = inputDim, kernel_initializer='glorot_uniform', activation='relu'))
         for i in range(1,layer):
             self.model.add(Dense(neuronPerLayer[i], kernel_initializer='glorot_uniform', activation='sigmoid'))
+            
 
         # compile the model
         self.model.compile(loss='mse', optimizer='adam', metrics=['accuracy'])

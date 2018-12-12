@@ -4,11 +4,12 @@ import pygame.draw
 import scene as s
 import menu as m
 import time
+from random import randint
 
-grid_size = (10,30)
-player_pos = (grid_size[0]/2,grid_size[1]-1)
+grid_size = (9,13)
+player_pos = (int(grid_size[0]/2),grid_size[1]-1)
 barrier_h = 2
-barrier_x_list = [(0,0),(3,5)]
+barrier_x_list = [(2,3)]
 
 __cellSize__ = 20
 

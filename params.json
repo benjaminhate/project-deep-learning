@@ -1,0 +1,9 @@
+{
+    "neuronPerLayer": [12,6,3,2],
+    "inputDim": 5,
+    "nbLayer": 4,
+    "nbVectorDb":1000,
+    "nbEpoch":8,
+    "batchSize":2,
+    "verbose":1
+}
