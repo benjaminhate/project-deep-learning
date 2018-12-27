@@ -26,10 +26,6 @@ menu_list = [m.MenuItem("Start",1,start),m.MenuItem("Train",2,train)]
 def main():
     menu = m.Menu(menu_list)
     menu.start_menu()
-    # sTrain = s.TrainScene((300,200))
-    # sTrain.loop()
-    # sGame = s.GameScene(__cellSize__,grid_size,player_pos,barrier_h,barrier_x_list)
-    # sGame.loop()
     pygame.quit()
 
 main()

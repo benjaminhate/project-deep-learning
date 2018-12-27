@@ -27,7 +27,7 @@ class BrainNN(AbstractBrain):
         self.model.add(Dense(neuronPerLayer[0], input_dim = inputDim, kernel_initializer='glorot_uniform', activation='relu'))
         for i in range(1,layer):
             self.model.add(Dense(neuronPerLayer[i], kernel_initializer='glorot_uniform', activation='sigmoid'))
-            
+
 
         # compile the model
         self.model.compile(loss='mse', optimizer='adam', metrics=['accuracy'])
@@ -42,7 +42,6 @@ class BrainNN(AbstractBrain):
 
         #import a model instead of training
         #self.importNN("model.h5")
-
 
     def next_move(self,move_list,game):
         player_pos = list(game.player.pos)

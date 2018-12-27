@@ -4,6 +4,10 @@ from game import Game
 from grid import GridValue as gv
 from brainNN import BrainNN
 import time
+import json
+
+with open('params.json') as data_file:
+    data = json.load(data_file)
 
 class Scene:
     _mouseCoords = (0,0)
@@ -132,10 +136,9 @@ class TrainScene(Scene):
         pygame.display.flip()
 
         brain = BrainNN()
-        neuronPerLayer = [3,2,2,2]
-        brain.createNN(5,4,neuronPerLayer)
-        brain.regenerateDb(1000)
-        brain.trainNN(brain.database.data,brain.database.labels,20,2,1)
+        brain.createNN(data['inputDim'],data['nbLayer'],data['neuronPerLayer'])
+        brain.regenerateDb(data['nbVectorDb'])
+        brain.trainNN(brain.database.data,brain.database.labels,data['nbEpoch'],data['batchSize'],data['verbose'])
         brain.exportNN("model.h5")
 
         green = (0,255,0)
